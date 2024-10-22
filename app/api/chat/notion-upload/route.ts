@@ -12,7 +12,13 @@ export async function POST(request: NextRequest) {
   try {
     const contents = await request.json();
     const documents = [new Document({text: contents.text,
-                                      metadata:{URL: contents.url}})];
+      metadata:{
+        URL: contents.url,
+        link: contents.url,
+        source: contents.source,
+        file_name: contents.file_name
+      }
+    })];
 
     const index = await getDataSource();
     if (!index) {

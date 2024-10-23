@@ -133,3 +133,18 @@ export async function attachSalesforceTask(task: {email: string, meeting_time: s
             console.log("Error creating Salesforce task: " + error)
         );
 }
+
+export async function createNotionPage(page: {text: string}, jwt: string) {
+    return await fetch(process.env.CREATE_NOTION_PAGE ?? "", {
+        method: "POST",
+        body: JSON.stringify(page),
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "bearer " + jwt,
+        },
+    })
+        .then((response) => response.json())
+        .catch((error) =>
+            console.log("Error creating Notion page: " + error)
+        );
+}

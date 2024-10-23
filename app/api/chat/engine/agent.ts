@@ -1,7 +1,7 @@
 import {FunctionTool, OpenAIAgent, QueryEngineTool} from "llamaindex";
 import {
     attachSalesforceTask,
-    createAsanaTask, createGoogleCalendarEvent,
+    createAsanaTask, createGoogleCalendarEvent, createPageInNotion,
     createSalesforceContact,
     createSalesforceOpportunity, getAsanaTeam, getGoogleCalendarAvailability,
     sendSlack,
@@ -29,6 +29,38 @@ export async function createAgent(userId: string | (() => string), documentIds?:
                     },
                 },
                 required: ["transcript"],
+            },
+        }
+    );
+
+    const createNotionPage = FunctionTool.from(
+        async({ title, text }: { title: string; text: string; }) => {
+            console.log("Notion Page Title: " + title);
+            console.log("Page text: " + text. replace(/(\r\n|\n|\r)/gm," "));
+
+            const response = await createPageInNotion({title: title, text: text. replace(/(\r\n|\n|\r)/gm," ")}, signJwt(userId));
+            if(response.status){
+                return "Notion page successfully created";
+            }
+            return "Notion page failed to be created";
+        },
+        {
+            name: "createNotionPage",
+            description: "Use this function to create a page in Notion. When users ask for text or document contents to " +
+                "be sent to Notion, use this function tool",
+            parameters: {
+                type: "object",
+                properties: {
+                    title: {
+                        type: "string",
+                        description: "Title of Notion Page",
+                    },
+                    text: {
+                        type: "string",
+                        description: "Text contents of the Notion page",
+                    },
+                },
+                required: ["title", "text"],
             },
         }
     );
@@ -572,6 +604,7 @@ export async function createAgent(userId: string | (() => string), documentIds?:
             draftAsanaTask, confirmAndCreateAsanaTask, getAsanaMemberId,
             getSdrSchedule, convertUtcDatetimeToPstDatetime,
             createMeeting, sendSlackMeetingNotification, createSalesforceTask,
+            createNotionPage,
             queryEngineTool]
     });
 }

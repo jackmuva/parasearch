@@ -134,7 +134,7 @@ export async function attachSalesforceTask(task: {email: string, meeting_time: s
         );
 }
 
-export async function createNotionPage(page: {text: string}, jwt: string) {
+export async function createPageInNotion(page: {title: string, text: string}, jwt: string) {
     return await fetch(process.env.CREATE_NOTION_PAGE ?? "", {
         method: "POST",
         body: JSON.stringify(page),

@@ -1,7 +1,7 @@
 import React from "react";
 import {Textarea} from "@/app/components/ui/textarea";
 import {Button} from "@/app/components/ui/button";
-import {SearchHandler} from "@/app/components/ui/search/search.interface";
+import {SearchHandler} from "@/app/components/ui/search/types/search.interface";
 
 export default function SearchInput(props: SearchHandler){
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

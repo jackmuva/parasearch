@@ -10,6 +10,7 @@ import {AuthenticatedConnectUser} from "@useparagon/connect";
 
 interface ChildProps {
   user: AuthenticatedConnectUser | null,
+  preprompt?: string
 }
 const ChatSection: React.FC<ChildProps> = (props) => {
   const { backend } = useClientConfig();
@@ -60,6 +61,7 @@ const ChatSection: React.FC<ChildProps> = (props) => {
             messages={messages}
             append={append}
             setInput={setInput}
+            preprompt={props.preprompt}
         />
       </div>
   );

@@ -16,7 +16,8 @@ export const queryPinecone = async(searchTerm: string, documentIds?: string[], p
     const nodes: any = [];
     if(!response.sourceNodes) return nodes;
     for(const sourceNode of response.sourceNodes){
-        console.log(sourceNode);
+        console.log(sourceNode.node.metadata.file_name ? sourceNode.node.metadata.file_name : sourceNode.node.metadata.URL);
+        console.log(sourceNode.score);
         const fileName = sourceNode.node.metadata.file_name ? sourceNode.node.metadata.file_name : sourceNode.node.metadata.URL;
         const source = {
             file_name: fileName,

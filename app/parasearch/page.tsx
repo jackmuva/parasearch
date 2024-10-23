@@ -20,7 +20,7 @@ export default function Parasearch() {
                 <Header toggle = {toggleDropdown}/>
                 {intgDropdown && <Integrations user={user} setUser={setUser}/>}
                 <div className="flex">
-                    <SearchSection>
+                    <SearchSection user={user}>
                     </SearchSection>
                 </div>
             </div>

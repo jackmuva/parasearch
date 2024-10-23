@@ -1,5 +1,5 @@
 import { JSONValue } from "ai";
-import React from "react";
+import React, {useRef, useState} from "react";
 import { Button } from "../button";
 import { DocumentPreview } from "../document-preview";
 import FileUploader from "../file-uploader";
@@ -26,6 +26,7 @@ export default function ChatInput(
   > & {
     requestParams?: any;
     setRequestData?: React.Dispatch<any>;
+    preprompt?: string;
   },
 ) {
   const {
@@ -37,6 +38,13 @@ export default function ChatInput(
     reset,
     getAnnotations,
   } = useFile();
+  const [preprompted, setPreprompted] = useState<boolean>(false);
+  const formRef = useRef(null);
+  if(!preprompted && props.preprompt && props.setInput){
+    props.setInput(props.preprompt);
+    setPreprompted(true);
+    formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+  }
 
   // default submit function does not handle including annotations in the message
   // so we need to use append function to submit new message with annotations
@@ -87,6 +95,7 @@ export default function ChatInput(
 
   return (
     <form
+        ref={formRef}
       onSubmit={onSubmit}
       className="rounded-xl bg-white p-4 shadow-xl space-y-4 shrink-0"
     >

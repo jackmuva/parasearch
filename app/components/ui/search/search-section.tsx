@@ -3,8 +3,13 @@ import SearchInput from "@/app/components/ui/search/search-input";
 import {SearchResult} from "@/app/components/ui/search/types/search-result";
 import {useClientConfig} from "@/app/components/ui/chat/hooks/use-config";
 import SearchView from "@/app/components/ui/search/search-view";
+import {AuthenticatedConnectUser} from "@useparagon/connect";
 
-export default function SearchSection() {
+interface ChildProps {
+    user: AuthenticatedConnectUser | null,
+}
+
+export default function SearchSection(props: ChildProps) {
     const { backend } = useClientConfig();
     const [input, setInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +25,8 @@ export default function SearchSection() {
             method: 'POST',
             body: JSON.stringify({searchTerm: input}),
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                "Authorization": "Bearer " + sessionStorage.getItem("jwt")
             }
         }).then((res) => res.json());
         console.log(res);
@@ -39,7 +45,7 @@ export default function SearchSection() {
                 isLoading={loading}
                 handleInputChange={handleInputChange}>
             </SearchInput>
-            <SearchView results={results} loading={loading}></SearchView>
+            <SearchView results={results} loading={loading} user={props.user}></SearchView>
         </div>
     )
 };

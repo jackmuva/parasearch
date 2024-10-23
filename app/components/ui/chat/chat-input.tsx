@@ -1,5 +1,5 @@
 import { JSONValue } from "ai";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Button } from "../button";
 import { DocumentPreview } from "../document-preview";
 import FileUploader from "../file-uploader";
@@ -39,11 +39,21 @@ export default function ChatInput(
     getAnnotations,
   } = useFile();
   const [preprompted, setPreprompted] = useState<boolean>(false);
-  const formRef = useRef(null);
-  if(!preprompted && props.preprompt && props.setInput){
-    props.setInput(props.preprompt);
-    setPreprompted(true);
-    formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    prepopulate();
+  }, []);
+  function prepopulate() {
+    if (!preprompted && props.preprompt && props.setInput) {
+      props.setInput(props.preprompt);
+      setPreprompted(true);
+
+      if (formRef.current) {
+        formRef.current.dispatchEvent(new Event('submit', {cancelable: true, bubbles: true}));
+        // formRef.current.submit()
+      }
+    }
   }
 
   // default submit function does not handle including annotations in the message
